@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="user-info">
+        <img id="user-avatar" src="{{ user.avatar }}" alt="User Avatar">
+        <h2 id="user-name">{{ user.name }}</h2>
+        <p id="clicks-count">Clicks: 0</p>
+    </div>
+    <div class="clicker">
+        <button id="click-button">Click Me!</button>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

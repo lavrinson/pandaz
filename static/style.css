@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+.user-info {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    max-width: 400px;
+}
+
+#user-avatar {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+#clicks-count {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.clicker {
+    margin: 20px auto;
+}
+
+#click-button {
+    padding: 15px 30px;
+    font-size: 1.5em;
+    cursor: pointer;
+}
