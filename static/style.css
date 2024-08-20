@@ -1,35 +1,23 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: #f0f0f0;
 }
 
-.user-info {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    margin: 20px auto;
-    max-width: 400px;
+.user-block {
+    margin-bottom: 20px;
 }
 
-#user-avatar {
+.profile-photo {
     border-radius: 50%;
     width: 100px;
     height: 100px;
 }
 
-#clicks-count {
-    font-size: 1.2em;
-    margin: 10px 0;
-}
-
 .clicker {
-    margin: 20px auto;
+    margin-top: 20px;
 }
 
-#click-button {
-    padding: 15px 30px;
-    font-size: 1.5em;
-    cursor: pointer;
+button {
+    padding: 10px 20px;
+    font-size: 16px;
 }

@@ -1,24 +1,28 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const clickButton = document.getElementById('click-button');
-    const clicksCount = document.getElementById('clicks-count');
+document.getElementById('click-button').addEventListener('click', async () => {
+    const button = document.getElementById('click-button');
+    const clicksElement = document.getElementById('clicks');
 
-    clickButton.addEventListener('click', async function() {
-        try {
-            const response = await fetch('/update_clicks', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            });
-            const data = await response.json();
-            if (response.ok) {
-                clicksCount.textContent = `Clicks: ${data.clicks}`;
-            } else {
-                console.error(data.error);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+    // Отключаем кнопку, чтобы предотвратить множественные запросы
+    button.disabled = true;
+    button.textContent = 'Обработка...';
+
+    try {
+        const response = await fetch('/update_clicks', { method: 'POST' });
+
+        // Проверяем, что ответ успешный
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-    });
+
+        // Парсим ответ в JSON
+        const data = await response.json();
+        clicksElement.textContent = data.clicks;
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
+        clicksElement.textContent = 'Ошибка обновления кликов'; // Отображаем сообщение об ошибке пользователю
+    } finally {
+        // Восстанавливаем кнопку после завершения запроса
+        button.disabled = false;
+        button.textContent = 'Клик!';
+    }
 });

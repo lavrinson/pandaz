@@ -1,55 +1,30 @@
+import nest_asyncio
+import asyncio
 from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
-from models import Session, User
-from config import TELEGRAM_TOKEN
+from telegram.ext import Application, CommandHandler, CallbackContext
+
+# Применение nest_asyncio
+nest_asyncio.apply()
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.message.from_user
-    user_id = str(user.id)
-    first_name = user.first_name
-    last_name = user.last_name
-    username = user.username
-
-    # Получение профиля пользователя
-    profile_photo = ''
-    photos = await user.get_profile_photos()
-    if photos.total_count > 0:
-        profile_photo = photos.photos[0][0].file_id  # Получаем ID первой фотографии
-
-    # Запись в базу данных
-    session = Session()
-    existing_user = session.query(User).filter_by(id=user_id).first()
-    if existing_user:
-        existing_user.first_name = first_name
-        existing_user.last_name = last_name
-        existing_user.username = username
-        existing_user.profile_photo = profile_photo
-    else:
-        new_user = User(
-            id=user_id,
-            first_name=first_name,
-            last_name=last_name,
-            username=username,
-            profile_photo=profile_photo
-        )
-        session.add(new_user)
-    session.commit()
-    session.close()
-
-    await update.message.reply_text(f"Привет, {first_name}!")
+# Обработчик команды /start
+async def start(update: Update, context: CallbackContext) -> None:
+    user = update.effective_user
+    await update.message.reply_text(f'Привет, {user.first_name}!')
 
 
-def main():
-    # Создайте экземпляр Application и передайте токен бота
-    application = Application.builder().token(TELEGRAM_TOKEN).build()
+# Главная функция
+async def main() -> None:
+    # Создание приложения и добавление обработчиков
+    application = Application.builder().token("7005144767:AAE0VP2nkpvEr-I_X78oAYn9_LT5VYEbAxo").build()
 
-    # Регистрация обработчика команд
+    # Регистрация обработчика команды /start
     application.add_handler(CommandHandler("start", start))
 
     # Запуск бота
-    application.run_polling()
+    await application.run_polling()
 
 
-if __name__ == '__main__':
-    main()
+# Запуск основного кода
+if __name__ == "__main__":
+    asyncio.run(main())

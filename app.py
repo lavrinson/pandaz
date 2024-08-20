@@ -1,45 +1,28 @@
-from flask import Flask, render_template, jsonify, request, session
-from flask_session import Session
-from datetime import timedelta
+import asyncio
+import nest_asyncio
+from telegram import Update
+from telegram.ext import Application, CommandHandler, CallbackContext
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key_here'
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)
-Session(app)
+# Применение nest_asyncio для работы в среде с уже запущенным циклом событий
+nest_asyncio.apply()
 
-user_data = {}
+# Обработчик команды /start
+async def start(update: Update, context: CallbackContext) -> None:
+    user = update.effective_user
+    await update.message.reply_text(f'Привет, {user.first_name}!')
 
-@app.route('/')
-def index():
-    user = session.get('user', {})
-    return render_template('index.html', user=user)
+# Главная функция
+async def main() -> None:
+    # Создание приложения и добавление обработчиков
+    application = Application.builder().token("7005144767:AAE0VP2nkpvEr-I_X78oAYn9_LT5VYEbAxo").build()
 
-@app.route('/update_clicks', methods=['POST'])
-def update_clicks():
-    if 'user' in session:
-        user_id = session['user']['id']
-        if user_id in user_data:
-            user_data[user_id]['clicks'] += 1
-            return jsonify({'clicks': user_data[user_id]['clicks']})
-        else:
-            return jsonify({'error': 'User data not found'}), 400
-    return jsonify({'error': 'User not logged in'}), 400
+    # Регистрация обработчика команды /start
+    application.add_handler(CommandHandler("start", start))
 
-@app.route('/login')
-def login():
-    user = {
-        'id': '1',
-        'name': 'CRYPTO DRELL',
-        'avatar': 'https://example.com/avatar.jpg'
-    }
-    session['user'] = user
-    user_data[user['id']] = {
-        'name': user['name'],
-        'avatar': user['avatar'],
-        'clicks': 0
-    }
-    return render_template('index.html', user=user)
+    # Запуск бота
+    await application.run_polling()
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Запуск основного кода
+if __name__ == "__main__":
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())

@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clicker Game</title>
+    <title>Кликер</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="user-info">
-        <img id="user-avatar" src="{{ user.avatar }}" alt="User Avatar">
-        <h2 id="user-name">{{ user.name }}</h2>
-        <p id="clicks-count">Clicks: 0</p>
+    <div class="user-block">
+        <img src="{{ user.profile_photo }}" alt="Profile Photo" class="profile-photo">
+        <h1>{{ user.name }}</h1>
+        <p>Количество кликов: <span id="clicks">{{ user.clicks }}</span></p>
     </div>
     <div class="clicker">
-        <button id="click-button">Click Me!</button>
+        <button id="click-button">Клик!</button>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
